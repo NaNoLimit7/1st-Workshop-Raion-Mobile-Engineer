@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:workshop_1/miniproject/widget/carousel_view_widget.dart';
 import 'package:workshop_1/miniproject/widget/category_card.dart';
 import 'package:workshop_1/miniproject/widget/page_view_widget.dart';
 import 'package:workshop_1/miniproject/widget/product_card.dart';
+import 'package:workshop_1/miniproject/providers/product_provider.dart';
 
 class HomePage4 extends StatefulWidget {
   const HomePage4({super.key});
@@ -51,28 +53,26 @@ class _HomePage4State extends State<HomePage4> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: false,
-        title: Text(
+        title: const Text(
           "Explore",
           style: TextStyle(
-            color: const Color(0xFF007E2F),
+            color: Color(0xFF007E2F),
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
       body: Padding(
-        padding: const .only(left: 20, right: 20, bottom: 20),
+        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: .start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 20,
             children: [
               Padding(
-                padding: const .only(top: 15.0),
+                padding: const EdgeInsets.only(top: 15.0),
                 child: TextField(
                   decoration: InputDecoration(
-
-                    // [INI BUAT ICON SEARCH NYA]
                     prefixIcon: Padding(
                       padding: const EdgeInsets.only(
                         left: 15,
@@ -82,39 +82,32 @@ class _HomePage4State extends State<HomePage4> {
                       ),
                       child: Image.asset('assets/icons/search.png', width: 18),
                     ),
-
-                    // [INI BUAT HINT TEXT NYA]
                     hintText: 'Search..',
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       fontSize: 16,
-                      fontWeight: .w800,
+                      fontWeight: FontWeight.w800,
                       color: Color(0xFF939393),
                     ),
-
-                    // [INI BUAT TIPE BORDER UMUM BUAT SEMUA KONDISI]
-                    border: OutlineInputBorder(borderRadius: .circular(30)),
-
-                    // [INI BUAT TIPE BORDER  KALO LAGI GA NGAPA NGAPAIN]
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         color: Color(0xFF505050),
                         width: 0.1,
                       ),
-                      borderRadius: .circular(30),
+                      borderRadius: BorderRadius.circular(30),
                     ),
-
-                    contentPadding: .zero,
+                    contentPadding: EdgeInsets.zero,
                   ),
                 ),
               ),
 
-              // [INI BUAT YANG PENGEN NYOBA TIPE CAROUSEL]
               CarouselViewWidget(
                 carouselController: _carouselController,
                 carouselItemExtend: _carouselItemExtend,
               ),
 
-              // INI DOT INDICATOR BUAT CAROUSEL
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: 6,
@@ -124,41 +117,30 @@ class _HomePage4State extends State<HomePage4> {
                     width: 6,
                     height: 6,
                     decoration: ShapeDecoration(
-                      color:
-                          _carouselPage ==
-                              index // kalo index sama dengan page yang aktif, warnanya hijau, kalo engga abu abu
-                          ? Color(0xFF007E2F)
-                          : Color(0xFFD9D9D9),
-                      shape: OvalBorder(),
+                      color: _carouselPage == index
+                          ? const Color(0xFF007E2F)
+                          : const Color(0xFFD9D9D9),
+                      shape: const OvalBorder(),
                     ),
                   ),
                 ),
               ),
 
-              // [INI BUAT YANG PENGEN NYOBA TIPE PAGE VIEW]
               PageViewWidget(pageController: _pageController),
 
-              // INI DOT INDICATOR BUAT PAGE VIEW
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: 6,
-                /*
-                  List.generate itu buat generate widget sebanyak pageCount, 
-                  terus index itu buat ngecek page yang aktif.
-                  Semacam loop gitu tapi buat widget.
-                */
-                children: List.generate( 
-                  pageCount, // jumlah widget yg mau dibuat
+                children: List.generate(
+                  pageCount,
                   (index) => Container(
                     width: 6,
                     height: 6,
                     decoration: ShapeDecoration(
-                      color:
-                          _pageViewPage ==
-                              index // kalo index sama dengan page yang aktif, warnanya hijau, kalo engga abu abu
-                          ? Color(0xFF007E2F)
-                          : Color(0xFFD9D9D9),
-                      shape: OvalBorder(),
+                      color: _pageViewPage == index
+                          ? const Color(0xFF007E2F)
+                          : const Color(0xFFD9D9D9),
+                      shape: const OvalBorder(),
                     ),
                   ),
                 ),
@@ -167,15 +149,14 @@ class _HomePage4State extends State<HomePage4> {
               Text(
                 'Categories',
                 style: TextStyle(
-                  fontWeight: .w500,
+                  fontWeight: FontWeight.w500,
                   fontSize: 16,
                   fontFamily: GoogleFonts.poppins().fontFamily,
                 ),
               ),
 
-              // [KATEGORI]
-              SingleChildScrollView(
-                scrollDirection: .horizontal,
+              const SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
                 child: Row(
                   spacing: 5,
                   children: [
@@ -195,52 +176,38 @@ class _HomePage4State extends State<HomePage4> {
                 ),
               ),
 
-              Text(
+              const Text(
                 'Browse Products',
-                style: TextStyle(fontWeight: .w500, fontSize: 16),
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
               ),
 
-              // INI GRIDVIEW BUAT TAMPILIN PRODUKNYA
-              // Pake row biasa juga boleh, tapi kalo gridview bisa lebih rapi dan gampang buat nampilin banyak produk
-              GridView(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20,
-                  mainAxisExtent: 280,
-                ),
-                children: [
-                  ProductCard(
-                    title: 'Berries',
-                    description: 'Berries is a sweet fruit with red color.',
-                    image: 'assets/images/berries.png',
-                    rating: '4.5 (200)',
-                    isFavorite: false,
-                  ),
-                  ProductCard(
-                    title: 'Tulsi',
-                    description: 'Leaf of berries is very green and fresh.',
-                    image: 'assets/images/tulsi.png',
-                    rating: '4.9 (324)',
-                    isFavorite: false,
-                  ),
-                  ProductCard(
-                    title: 'Milk',
-                    description: 'Milk is a white liquid produced by mammals.',
-                    image: 'assets/images/milk.png',
-                    rating: '4.5 (672)',
-                    isFavorite: false,
-                  ),
-                  ProductCard(
-                    title: 'Tomato',
-                    description: 'Is tomato a fruit or a vegetable?',
-                    image: 'assets/images/tomato.png',
-                    rating: '4.9 (324)',
-                    isFavorite: false,
-                  ),
-                ],
+              // [CUKUP GUNAKAN CONSUMER SAJA, GRIDVIEW LAMA DIHAPUS]
+              Consumer<ProductProvider>(
+                builder: (context, provider, child) {
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 20,
+                          mainAxisSpacing: 20,
+                          mainAxisExtent: 280,
+                        ),
+                    itemCount: provider.products.length,
+                    itemBuilder: (context, index) {
+                      final product = provider.products[index];
+                      return ProductCard(
+                        id: product.id,
+                        title: product.title,
+                        description: product.description,
+                        image: product.image,
+                        rating: product.rating,
+                        isFavorite: product.isFavorite,
+                      );
+                    },
+                  );
+                },
               ),
             ],
           ),
